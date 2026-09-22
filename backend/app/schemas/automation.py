@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_serializer
 
 from app.schemas.common import OptionalSnowflake, Snowflake
 
@@ -36,6 +36,13 @@ class LogOut(BaseModel):
     message: str
     event_metadata: dict[str, Any] | None
     created_at: datetime
+
+    @field_serializer("created_at")
+    def _as_utc(self, value: datetime) -> str:
+        """SQLite hands back naive datetimes; they are UTC, so say so."""
+        if value.tzinfo is None:
+            value = value.replace(tzinfo=timezone.utc)
+        return value.isoformat()
 
 
 class LogPage(BaseModel):

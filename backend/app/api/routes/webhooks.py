@@ -56,9 +56,7 @@ async def custom_webhook(
     try:
         payload = CustomWebhookIn.model_validate(json.loads(raw or b"{}"))
     except (ValidationError, json.JSONDecodeError) as exc:
-        raise HTTPException(
-            status.HTTP_422_UNPROCESSABLE_ENTITY, f"Invalid payload: {exc}"
-        ) from exc
+        raise HTTPException(422, f"Invalid payload: {exc}") from exc
 
     guild = guild_service.get_guild_by_discord_id(db, payload.guild_id)
     if guild is None:

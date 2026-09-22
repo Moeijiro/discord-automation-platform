@@ -28,6 +28,9 @@ router = APIRouter(prefix="/api/guilds", tags=["guilds"])
 
 settings_limit = RateLimiter(times=20, seconds=60, scope="settings")
 
+# Starlette renamed the 422 constant; the number is the stable spelling.
+UNPROCESSABLE = 422
+
 
 @router.get("", response_model=list[GuildSummary], summary="Servers the user can see")
 def list_guilds(
@@ -80,7 +83,13 @@ async def get_guild(
             detail.member_count = info.get("approximate_member_count")
             detail.presence_count = info.get("approximate_presence_count")
             detail.roles = [
-                RoleOut(**role.__dict__)
+                RoleOut(
+                    id=role.id,
+                    name=role.name,
+                    color=role.color,
+                    position=role.position,
+                    managed=role.managed,
+                )
                 for role in await gateway.fetch_roles(guild.discord_id)
                 if role.name != "@everyone"
             ]
@@ -163,13 +172,12 @@ async def _validate_references(
         value = changes.get(field)
         if value and value not in role_ids:
             raise HTTPException(
-                status.HTTP_422_UNPROCESSABLE_ENTITY,
-                f"{field} does not match a role in this server.",
+                UNPROCESSABLE, f"{field} does not match a role in this server."
             )
     channel = changes.get("welcome_channel_id")
     if channel and channel not in channel_ids:
         raise HTTPException(
-            status.HTTP_422_UNPROCESSABLE_ENTITY,
+            UNPROCESSABLE,
             "welcome_channel_id does not match a text channel in this server.",
         )
 
