@@ -41,8 +41,9 @@ FastAPI backend · Discord.py gateway bot · React + TypeScript dashboard · SQL
 | ![Server dashboard](docs/screenshots/server.png) | ![Audit log](docs/screenshots/logs.png) |
 | *Automation configuration and quick actions* | *Filterable audit trail* |
 
-> Place the four PNGs in `docs/screenshots/`. Running the stack in demo mode
-> (`DEMO_MODE=true`) produces exactly these screens with no Discord application required.
+> Captured from the running stack in demo mode — no Discord application required. The
+> servers and roles are mock structure; the audit entries are the actions actually taken
+> during that session.
 
 ---
 

@@ -9,4 +9,5 @@ Expected files (1440×900 or similar, dark theme):
 | `server.png` | `/dashboard/server/{id}` |
 | `logs.png` | `/dashboard/server/{id}/logs` |
 
-Run the stack in demo mode to capture them without a Discord application.
+These were captured at 1440x900 from the stack running in demo mode, so they can be
+regenerated on any machine without a Discord application.
