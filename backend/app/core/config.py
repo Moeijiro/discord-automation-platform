@@ -39,6 +39,10 @@ class Settings(BaseSettings):
     session_secret: str = Field(default="dev-only-insecure-secret", min_length=8)
     session_ttl_minutes: int = Field(default=60 * 24 * 7, ge=5)
     cookie_secure: bool = False
+    # "lax" is right when dashboard and API share a site (localhost:5173 ->
+    # localhost:8000 counts). Split them across domains and this must be
+    # "none", which browsers only honour together with COOKIE_SECURE=true.
+    cookie_samesite: Literal["lax", "strict", "none"] = "lax"
     webhook_secret: str = "dev-only-insecure-webhook-secret"
 
     # --- Frontend --------------------------------------------------------
