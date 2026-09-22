@@ -15,12 +15,12 @@ const TONES: Record<string, Tone> = {
   automation_failed: "danger",
 };
 
-const ACTORS = {
+const ACTORS: Record<string, typeof Bot> = {
   user: UserIcon,
   bot: Bot,
   webhook: Globe,
   system: ShieldCheck,
-} as const;
+};
 
 interface LogTableProps {
   logs: AutomationLog[];
