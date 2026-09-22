@@ -51,6 +51,7 @@ class Role:
     color: int = 0
     position: int = 0
     managed: bool = False
+    permissions: str = "0"
 
 
 @dataclass(slots=True)

@@ -168,6 +168,7 @@ class LiveDiscordGateway:
                 color=item.get("color", 0),
                 position=item.get("position", 0),
                 managed=item.get("managed", False),
+                permissions=str(item.get("permissions", "0")),
             )
             for item in data or []
         ]
@@ -208,14 +209,12 @@ class LiveDiscordGateway:
         if guild.get("owner_id") == bot_id:
             return int(Permission.ADMINISTRATOR)
 
+        # @everyone shares the guild's id and applies to every member.
         bits = 0
-        everyone = roles.get(guild_id)  # @everyone shares the guild's id
-        if everyone:
-            bits |= int(getattr(everyone, "permissions", 0) or 0)
-        for role_id in member.roles:
+        for role_id in [guild_id, *member.roles]:
             role = roles.get(role_id)
             if role:
-                bits |= int(getattr(role, "permissions", 0) or 0)
+                bits |= int(role.permissions or 0)
         return bits
 
     async def add_role(
