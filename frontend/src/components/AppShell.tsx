@@ -93,7 +93,7 @@ function DemoBanner() {
         Servers, roles and channels are mock data. Nothing reaches Discord — actions you
         take are still recorded in the real audit trail.
       </span>
-      <Badge tone="warning" className="ml-auto">
+      <Badge tone="warning" className="ml-auto hidden sm:inline-flex">
         no credentials configured
       </Badge>
     </div>
