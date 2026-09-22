@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { KeyRound, LogOut, Radio, Webhook } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/auth-context";
 import { PageHeader } from "@/components/PageHeader";
 import { Badge, StatusDot } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";

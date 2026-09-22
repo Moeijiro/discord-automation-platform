@@ -1,17 +1,8 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import { api, ApiError } from "@/lib/api";
+import { api } from "@/lib/api";
 import type { ModeInfo, User } from "@/lib/types";
-
-interface AuthValue {
-  user: User | null;
-  mode: ModeInfo | null;
-  loading: boolean;
-  logout: () => Promise<void>;
-  refresh: () => Promise<void>;
-}
-
-const AuthContext = createContext<AuthValue | null>(null);
+import { AuthContext, type AuthValue } from "@/context/auth-context";
 
 /**
  * Resolves the session once, at boot. Everything downstream can then treat
@@ -23,19 +14,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
-    const [modeInfo] = await Promise.all([api.mode().catch(() => null)]);
-    setMode(modeInfo);
-    try {
-      setUser(await api.me());
-    } catch (error) {
-      if (error instanceof ApiError && error.status === 401) setUser(null);
-      else setUser(null);
-    } finally {
-      setLoading(false);
-    }
+    setMode(await api.mode().catch(() => null));
+    // A 401 here is the normal "not signed in" case, not an error to surface.
+    setUser(await api.me().catch(() => null));
+    setLoading(false);
   }, []);
 
+  // The session lives on the server, not in React state: fetching it on mount
+  // is exactly the "synchronise with an external system" case effects are for.
   useEffect(() => {
+    // oxlint-disable-next-line react/set-state-in-effect
     void load();
   }, [load]);
 
@@ -57,10 +45,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuth(): AuthValue {
-  const value = useContext(AuthContext);
-  if (!value) throw new Error("useAuth must be used inside <AuthProvider>");
-  return value;
 }

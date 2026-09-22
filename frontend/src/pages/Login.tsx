@@ -1,6 +1,6 @@
 import { useSearchParams, Navigate } from "react-router-dom";
 import { KeyRound, ShieldCheck, Sparkles, Terminal } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/auth-context";
 import { Badge } from "@/components/ui/Badge";
 import { ErrorNote, Spinner } from "@/components/ui/Feedback";
 import { loginUrl } from "@/lib/api";

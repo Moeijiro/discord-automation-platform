@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ChevronRight, RefreshCw, ServerCog } from "lucide-react";
 import { api } from "@/lib/api";
 import { useAsync } from "@/hooks/useAsync";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/auth-context";
 import { PageHeader } from "@/components/PageHeader";
 import { GuildIcon } from "@/components/GuildIcon";
 import { Badge, StatusDot } from "@/components/ui/Badge";

@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Activity, LayoutGrid, LogOut, Settings as SettingsIcon, Zap } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/auth-context";
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
 
@@ -93,9 +93,9 @@ function DemoBanner() {
         Servers, roles and channels are mock data. Nothing reaches Discord — actions you
         take are still recorded in the real audit trail.
       </span>
-      <Badge tone="warning" className="ml-auto hidden sm:inline-flex">
-        no credentials configured
-      </Badge>
+      <span className="ml-auto hidden sm:block">
+        <Badge tone="warning">no credentials configured</Badge>
+      </span>
     </div>
   );
 }

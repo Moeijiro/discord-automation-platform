@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { AuthProvider } from "@/context/AuthContext";
+import { useAuth } from "@/context/auth-context";
 import { AppShell } from "@/components/AppShell";
 import { Spinner } from "@/components/ui/Feedback";
 import { Dashboard } from "@/pages/Dashboard";
