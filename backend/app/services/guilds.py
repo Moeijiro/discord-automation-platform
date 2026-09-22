@@ -10,6 +10,7 @@ from __future__ import annotations
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.core.config import DISCORD_CDN_BASE
 from app.models import Guild, GuildMembership, GuildSettings, User
 from app.services.discord_gateway import PartialGuild
 
@@ -84,3 +85,10 @@ def sync_user_guilds(
 
     db.commit()
     return seen
+
+
+def icon_url(guild: Guild) -> str | None:
+    """Discord CDN URL for the guild icon, or None so the UI can fall back."""
+    if not guild.icon:
+        return None
+    return f"{DISCORD_CDN_BASE}/icons/{guild.discord_id}/{guild.icon}.png?size=128"
