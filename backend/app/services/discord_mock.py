@@ -161,6 +161,11 @@ class MockDiscordGateway:
         self.sent_messages.append((channel_id, content))
         return f"4000000000000000{len(self.sent_messages):02d}"
 
+    def reset(self) -> None:
+        """Drop session state. Used by the test suite between cases."""
+        self._assignments.clear()
+        self.sent_messages.clear()
+
     def _require_known_role(self, guild_id: str, role_id: str) -> None:
         if not any(role.id == role_id for role in _ROLES.get(guild_id, [])):
             raise DiscordError("Unknown role for this guild", 404)
