@@ -75,7 +75,9 @@ async def ensure_role_assignable(
     roles = await gateway.fetch_roles(guild.discord_id)
     role = resolve_role(roles, role_id)
 
-    bot_member = await gateway.fetch_member(guild.discord_id, await _bot_id(gateway, guild))
+    bot_member = await gateway.fetch_member(
+        guild.discord_id, await gateway.bot_user_id()
+    )
     if bot_member is not None:
         by_id = {item.id: item for item in roles}
         highest = max(
@@ -89,17 +91,6 @@ async def ensure_role_assignable(
                 409,
             )
     return role
-
-
-async def _bot_id(gateway: DiscordGateway, guild: Guild) -> str:
-    """Best-effort lookup of the bot's own user id."""
-    from app.services.discord_mock import MockDiscordGateway
-
-    if isinstance(gateway, MockDiscordGateway):
-        return "500000000000000001"
-    ids = await gateway.bot_guild_ids()  # cheap call that primes the token
-    del ids
-    return getattr(gateway, "_bot_user_id", "") or ""
 
 
 # --------------------------------------------------------------------------

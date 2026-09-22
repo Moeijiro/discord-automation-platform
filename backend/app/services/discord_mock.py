@@ -26,6 +26,8 @@ from app.services.discord_gateway import (
     Role,
 )
 
+DEMO_BOT_ID = "500000000000000001"
+
 DEMO_USER = DiscordUser(
     id="900000000000000001", username="demo.admin", global_name="Demo Admin"
 )
@@ -102,6 +104,9 @@ class MockDiscordGateway:
         return list(DEMO_GUILDS)
 
     # -- Bot ---------------------------------------------------------------
+    async def bot_user_id(self) -> str:
+        return DEMO_BOT_ID
+
     async def bot_guild_ids(self) -> set[str]:
         return set(_BOT_GUILDS)
 
@@ -127,6 +132,9 @@ class MockDiscordGateway:
     async def fetch_member(self, guild_id: str, user_id: str) -> GuildMember | None:
         if guild_id not in _BOT_GUILDS:
             return None
+        if user_id == DEMO_BOT_ID:
+            bot_role = [r.id for r in _ROLES.get(guild_id, []) if r.managed]
+            return GuildMember(id=user_id, username="automation-bot", roles=bot_role)
         return GuildMember(
             id=user_id,
             username=DEMO_USER.username if user_id == DEMO_USER.id else f"member-{user_id[-4:]}",

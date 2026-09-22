@@ -37,6 +37,7 @@ class LiveDiscordGateway:
 
     def __init__(self, timeout: float = 10.0) -> None:
         self._timeout = timeout
+        self._bot_user_id: str | None = None
 
     # -- transport ---------------------------------------------------------
     async def _request(
@@ -150,6 +151,13 @@ class LiveDiscordGateway:
         ]
 
     # -- Bot ---------------------------------------------------------------
+    async def bot_user_id(self) -> str:
+        """The bot's own snowflake, fetched once per process."""
+        if self._bot_user_id is None:
+            data = await self._request("GET", "/users/@me")
+            self._bot_user_id = data["id"]
+        return self._bot_user_id
+
     async def bot_guild_ids(self) -> set[str]:
         data = await self._request("GET", "/users/@me/guilds")
         return {item["id"] for item in data or []}
@@ -198,8 +206,7 @@ class LiveDiscordGateway:
 
     async def bot_permissions(self, guild_id: str) -> int:
         """Resolve the bot's effective permissions from its roles in the guild."""
-        app_info = await self._request("GET", "/oauth2/applications/@me")
-        bot_id = app_info["id"]
+        bot_id = await self.bot_user_id()
         member = await self.fetch_member(guild_id, bot_id)
         if member is None:
             return 0
