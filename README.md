@@ -343,6 +343,20 @@ Makefile                 install / api / bot / web / test
 
 ---
 
+## Deployment
+
+There is no hosted instance; the project is set up to deploy as separate processes:
+
+- **API:** `uvicorn app.main:app --host 0.0.0.0 --port 8000` with `ENVIRONMENT=production`. The app refuses to start in production if `DEMO_MODE` is on, `SESSION_SECRET` is weak or the Discord credentials are missing.
+- **Web:** `cd frontend && npm ci && npm run build` produces a static `dist/`. Serve it from the same origin as the API (proxy `/api` to it), or set `VITE_API_BASE_URL`.
+- **Bot:** `python -m app.bot` with `DISCORD_BOT_TOKEN` is a separate process sharing the database with the API.
+- **Database:** `DATABASE_URL` takes any SQLAlchemy URL. The project is developed and tested on SQLite.
+- **Cookies:** serve the web app and the API from the same site (for example `app.example.com` and `api.example.com`) so the SameSite session cookie is sent, and set `COOKIE_SECURE=true` behind HTTPS.
+
+## Project status
+
+Complete portfolio project. Runs end to end in demo mode; the live Discord path needs a bot token and an OAuth2 application. CI runs the backend tests and the dashboard build on every push.
+
 ## Licence
 
 MIT — see [LICENSE](LICENSE).
