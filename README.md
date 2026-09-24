@@ -1,5 +1,7 @@
 # Discord Automation Platform
 
+**Portfolio case study:** [moeijiro.github.io/portfolio/projects/discord-automation-platform](https://moeijiro.github.io/portfolio/projects/discord-automation-platform/) · **Live demo:** not hosted — the app runs locally in a few commands (see below).
+
 A small, production-shaped platform for managing Discord server automation from a web
 dashboard: sign in with Discord, configure verification, welcome messages and role
 automation for a server you administrate, and read back an audit trail of everything the
